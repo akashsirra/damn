@@ -20,7 +20,7 @@ function SearchResults() {
     async function fetchResults() {
       try {
         const res = await fetch(
-          `http://localhost:5000/api/tmdb/search?query=${encodeURIComponent(query)}`
+          `${import.meta.env.VITE_API_URL}/api/tmdb/search?query=${encodeURIComponent(query)}`
         )
         const data = await res.json()
         setResults(data.results || [])

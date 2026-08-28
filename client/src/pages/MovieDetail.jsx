@@ -49,12 +49,12 @@ function MovieDetail() {
   useEffect(() => {
     async function fetchMovie() {
       try {
-        const res = await fetch(`http://localhost:5000/api/tmdb/movie/${id}`)
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tmdb/movie/${id}`)
         const data = await res.json()
         setMovie(data)
 
         if (data.imdb_id) {
-          const streamsRes = await fetch(`http://localhost:5000/api/streams/${data.imdb_id}`)
+          const streamsRes = await fetch(`${import.meta.env.VITE_API_URL}/api/streams/${data.imdb_id}`)
           const streamsData = await streamsRes.json()
           setSources(streamsData)
         }
