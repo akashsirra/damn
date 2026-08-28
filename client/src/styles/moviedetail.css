@@ -1,0 +1,110 @@
+.movie-detail-page {
+  padding-bottom: 4rem;
+}
+
+.movie-detail-hero {
+  position: relative;
+}
+
+.movie-detail-backdrop {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.5);
+}
+
+.movie-detail-info {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  margin-top: -80px;
+  position: relative;
+  z-index: 1;
+}
+
+.movie-detail-poster {
+  width: 160px;
+  min-width: 160px;
+  border-radius: var(--radius-card);
+  border: 2px solid var(--color-gold);
+  box-shadow: var(--shadow-card);
+}
+
+.movie-detail-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.movie-detail-title {
+  font-family: var(--font-marquee);
+  color: var(--color-gold);
+  font-size: 1.8rem;
+  margin: 0 0 0.5rem;
+}
+
+.movie-detail-overview {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--color-cream);
+  margin: 0 0 0.5rem;
+}
+
+.movie-detail-meta {
+  font-size: 0.85rem;
+  color: var(--color-gold-light);
+  margin: 0;
+}
+
+.movie-detail-sources {
+  padding: 0 1.5rem;
+  margin-top: 2rem;
+}
+
+.movie-detail-sources-title {
+  font-family: var(--font-marquee);
+  color: var(--color-gold);
+  font-size: 1.4rem;
+  border-bottom: 2px solid var(--color-teal);
+  padding-bottom: 0.5rem;
+}
+
+.source-block {
+  background: var(--color-maroon);
+  border: 1px solid var(--color-teal);
+  border-radius: var(--radius-card);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.source-addon-name {
+  color: var(--color-gold-light);
+  font-size: 1rem;
+  margin: 0 0 0.5rem;
+}
+
+.source-stream-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.source-stream-item {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--color-teal-light);
+  font-size: 0.9rem;
+  color: var(--color-cream);
+}
+
+.source-stream-item:last-child {
+  border-bottom: none;
+}
+
+.source-empty,
+.source-error {
+  color: var(--color-cream);
+  opacity: 0.7;
+  font-size: 0.9rem;
+  margin: 0;
+}

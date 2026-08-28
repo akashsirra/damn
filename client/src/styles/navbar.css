@@ -1,0 +1,59 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: var(--color-black);
+  border-bottom: 2px solid var(--color-gold);
+  flex-wrap: wrap;
+}
+
+.navbar-brand {
+  font-family: var(--font-marquee);
+  color: var(--color-gold);
+  font-size: 1.3rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.navbar-search {
+  display: flex;
+  flex: 1;
+  min-width: 150px;
+  gap: 0.5rem;
+}
+
+.navbar-search-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-teal);
+  background: var(--color-maroon);
+  color: var(--color-cream);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+}
+
+.navbar-search-input:focus {
+  outline: none;
+  border-color: var(--color-gold);
+}
+
+.navbar-search-button {
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-gold);
+  background: transparent;
+  color: var(--color-gold-light);
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.navbar-link {
+  color: var(--color-gold-light);
+  font-size: 0.85rem;
+  text-decoration: none;
+  white-space: nowrap;
+}

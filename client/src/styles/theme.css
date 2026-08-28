@@ -1,0 +1,27 @@
+:root {
+  --color-maroon: #4a1220;
+  --color-maroon-light: #6b1a2e;
+  --color-gold: #d4af37;
+  --color-gold-light: #e8c968;
+  --color-cream: #f5ead6;
+  --color-teal: #1a4d4d;
+  --color-teal-light: #2d6b6b;
+  --color-black: #0d0705;
+
+  --font-marquee: 'Playfair Display', 'Georgia', serif;
+  --font-body: 'Poppins', 'Helvetica Neue', sans-serif;
+
+  --radius-card: 8px;
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-black);
+  color: var(--color-cream);
+  font-family: var(--font-body);
+}

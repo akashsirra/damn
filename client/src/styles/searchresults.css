@@ -1,0 +1,22 @@
+.search-page {
+  padding: 1.5rem;
+}
+
+.search-title {
+  font-family: var(--font-marquee);
+  color: var(--color-gold);
+  font-size: 1.4rem;
+  margin: 0 0 1.5rem;
+}
+
+.search-loading,
+.search-empty {
+  color: var(--color-cream);
+  opacity: 0.7;
+}
+
+.search-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+}
