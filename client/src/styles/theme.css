@@ -1,14 +1,14 @@
 :root {
-  --color-maroon: #4a1220;
-  --color-maroon-light: #6b1a2e;
-  --color-gold: #d4af37;
-  --color-gold-light: #e8c968;
+  --color-maroon: #141414;
+  --color-maroon-light: #1f1f1f;
+  --color-gold: #ffffff;
+  --color-gold-light: #f2f2f2;
   --color-cream: #f5ead6;
   --color-teal: #1a4d4d;
   --color-teal-light: #2d6b6b;
   --color-black: #0d0705;
 
-  --font-marquee: 'Playfair Display', 'Georgia', serif;
+  --font-marquee: 'Helvetica Neue', Arial, sans-serif;
   --font-body: 'Poppins', 'Helvetica Neue', sans-serif;
 
   --radius-card: 8px;
@@ -24,4 +24,25 @@ body {
   background-color: var(--color-black);
   color: var(--color-cream);
   font-family: var(--font-body);
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-black) 25%,
+    #1a1a1a 37%,
+    var(--color-black) 63%
+  );
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.4s ease infinite;
+  border-radius: var(--radius-card);
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

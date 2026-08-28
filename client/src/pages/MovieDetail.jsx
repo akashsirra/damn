@@ -18,6 +18,25 @@ function isPlayableUrl(stream) {
   return Boolean(stream.url)
 }
 
+function MovieDetailSkeleton() {
+  return (
+    <div className="movie-detail-page">
+      <div className="movie-detail-hero">
+        <div className="skeleton movie-detail-skeleton-backdrop" />
+        <div className="movie-detail-info">
+          <div className="skeleton movie-detail-skeleton-poster" />
+          <div className="movie-detail-text">
+            <div className="skeleton movie-detail-skeleton-title" />
+            <div className="skeleton movie-detail-skeleton-line" />
+            <div className="skeleton movie-detail-skeleton-line" />
+            <div className="skeleton movie-detail-skeleton-line-short" />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function MovieDetail() {
   const { id } = useParams()
   const [movie, setMovie] = useState(null)
@@ -57,7 +76,7 @@ function MovieDetail() {
   }
 
   if (loading) {
-    return <div className="loading-screen">Loading the marquee...</div>
+    return <MovieDetailSkeleton />
   }
 
   if (!movie) {
@@ -108,7 +127,11 @@ function MovieDetail() {
       <div className="movie-detail-sources">
         <h2 className="movie-detail-sources-title">Sources</h2>
         {sourcesLoading ? (
-          <p>Checking installed addons...</p>
+          <div className="source-block">
+            <div className="skeleton source-skeleton-name" />
+            <div className="skeleton source-skeleton-line" />
+            <div className="skeleton source-skeleton-line" />
+          </div>
         ) : sources.length === 0 ? (
           <p>No addons installed yet. Add some from the Manage Addons page.</p>
         ) : (

@@ -117,3 +117,14 @@
   cursor: pointer;
   white-space: nowrap;
 }
+
+.addon-skeleton-name {
+  height: 1.05rem;
+  width: 30%;
+  margin-bottom: 0.6rem;
+}
+
+.addon-skeleton-line {
+  height: 0.85rem;
+  width: 70%;
+}

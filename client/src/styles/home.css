@@ -107,3 +107,18 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.movie-card-skeleton {
+  min-width: 130px;
+}
+
+.movie-card-skeleton-poster {
+  width: 100%;
+  height: 210px;
+}
+
+.movie-card-skeleton-title {
+  height: 0.9rem;
+  width: 80%;
+  margin-top: 0.6rem;
+}

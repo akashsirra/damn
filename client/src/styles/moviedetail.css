@@ -161,3 +161,43 @@
   color: var(--color-gold);
   text-decoration: underline;
 }
+
+.movie-detail-skeleton-backdrop {
+  width: 100%;
+  height: 320px;
+}
+
+.movie-detail-skeleton-poster {
+  width: 160px;
+  min-width: 160px;
+  height: 230px;
+}
+
+.movie-detail-skeleton-title {
+  height: 1.6rem;
+  width: 60%;
+  margin-bottom: 0.8rem;
+}
+
+.movie-detail-skeleton-line {
+  height: 0.9rem;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.movie-detail-skeleton-line-short {
+  height: 0.9rem;
+  width: 40%;
+}
+
+.source-skeleton-name {
+  height: 1.05rem;
+  width: 40%;
+  margin-bottom: 0.6rem;
+}
+
+.source-skeleton-line {
+  height: 0.85rem;
+  width: 90%;
+  margin-bottom: 0.4rem;
+}

@@ -1,6 +1,20 @@
 import { useEffect, useState } from 'react'
 import MovieRow from '../components/MovieRow.jsx'
-import "../styles/home.css";
+import MovieCardSkeleton from '../components/MovieCardSkeleton.jsx'
+import '../styles/home.css'
+
+function SkeletonRow({ title }) {
+  return (
+    <div className="movie-row">
+      <h2 className="movie-row-title">{title}</h2>
+      <div className="movie-row-scroll">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <MovieCardSkeleton key={i} />
+        ))}
+      </div>
+    </div>
+  )
+}
 
 function Home() {
   const [trending, setTrending] = useState([])
@@ -28,7 +42,12 @@ function Home() {
   }, [])
 
   if (loading) {
-    return <div className="loading-screen">Loading the marquee...</div>
+    return (
+      <div className="home-page">
+        <SkeletonRow title="Trending This Week" />
+        <SkeletonRow title="Popular Now Showing" />
+      </div>
+    )
   }
 
   return (

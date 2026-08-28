@@ -80,7 +80,7 @@ function ManageAddons() {
       {error && <p className="addons-error">{error}</p>}
 
       {loading ? (
-        <p className="addons-loading">Loading addons...</p>
+        <div className="addon-card"><div className="skeleton addon-skeleton-name" /><div className="skeleton addon-skeleton-line" /></div>
       ) : addons.length === 0 ? (
         <p className="addons-empty">No addons installed yet.</p>
       ) : (

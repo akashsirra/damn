@@ -13,7 +13,7 @@ function Navbar() {
 
   return (
     <nav className="navbar">
-      <Link to="/" className="navbar-brand">Midnight Reel</Link>
+      <Link to="/" className="navbar-brand">DAMN</Link>
       <form className="navbar-search" onSubmit={handleSubmit}>
         <input
           type="text"

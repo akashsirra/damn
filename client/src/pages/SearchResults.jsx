@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import MovieCard from '../components/MovieCard.jsx'
+import MovieCardSkeleton from '../components/MovieCardSkeleton.jsx'
 import '../styles/searchresults.css'
 
 function SearchResults() {
@@ -37,7 +38,11 @@ function SearchResults() {
       <h1 className="search-title">Results for "{query}"</h1>
 
       {loading ? (
-        <p className="search-loading">Searching the archives...</p>
+        <div className="search-grid">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <MovieCardSkeleton key={i} />
+          ))}
+        </div>
       ) : results.length === 0 ? (
         <p className="search-empty">No movies found.</p>
       ) : (
