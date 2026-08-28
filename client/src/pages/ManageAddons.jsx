@@ -11,7 +11,7 @@ function ManageAddons() {
   async function fetchAddons() {
     setLoading(true)
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/addons`)
+      const res = await fetch('https://damn-server.onrender.com/api/addons')
       const data = await res.json()
       setAddons(data)
     } catch (err) {
@@ -31,7 +31,7 @@ function ManageAddons() {
     setSubmitting(true)
     setError('')
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/addons`, {
+      const res = await fetch('https://damn-server.onrender.com/api/addons', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ manifest_url: manifestUrl.trim() }),
@@ -51,7 +51,7 @@ function ManageAddons() {
 
   async function handleDelete(id) {
     try {
-      await fetch(`${import.meta.env.VITE_API_URL}/api/addons/${id}`, {
+      await fetch(`https://damn-server.onrender.com/api/addons/${id}`, {
         method: 'DELETE',
       })
       setAddons((prev) => prev.filter((a) => a.id !== id))

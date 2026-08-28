@@ -20,7 +20,7 @@ function SearchResults() {
     async function fetchResults() {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/tmdb/search?query=${encodeURIComponent(query)}`
+          `https://damn-server.onrender.com/api/tmdb/search?query=${encodeURIComponent(query)}`
         )
         const data = await res.json()
         setResults(data.results || [])

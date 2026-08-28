@@ -25,8 +25,8 @@ function Home() {
     async function fetchMovies() {
       try {
         const [trendingRes, popularRes] = await Promise.all([
-          fetch(`${import.meta.env.VITE_API_URL}/api/tmdb/trending`),
-          fetch(`${import.meta.env.VITE_API_URL}/api/tmdb/popular`),
+          fetch('https://damn-server.onrender.com/api/tmdb/trending'),
+          fetch('https://damn-server.onrender.com/api/tmdb/popular'),
         ])
         const trendingData = await trendingRes.json()
         const popularData = await popularRes.json()
