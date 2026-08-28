@@ -25,6 +25,7 @@ function Navbar() {
         <button type="submit" className="navbar-search-button">Search</button>
       </form>
       <Link to="/addons" className="navbar-link">Manage Addons</Link>
+      <a href="https://buymeacoffee.com/ashu13" target="_blank" rel="noopener noreferrer" className="navbar-coffee-btn">☕ Buy Me a Coffee</a>
     </nav>
   )
 }
