@@ -1,8 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import '../styles/moviedetail.css'
 
 const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/w500'
+
+function getStreamLink(stream) {
+  if (stream.url) return stream.url
+  if (stream.externalUrl) return stream.externalUrl
+  if (stream.infoHash) {
+    const dn = encodeURIComponent(stream.title || stream.name || 'stream')
+    return `magnet:?xt=urn:btih:${stream.infoHash}&dn=${dn}`
+  }
+  return null
+}
+
+function isPlayableUrl(stream) {
+  return Boolean(stream.url)
+}
 
 function MovieDetail() {
   const { id } = useParams()
@@ -10,6 +24,8 @@ function MovieDetail() {
   const [sources, setSources] = useState([])
   const [loading, setLoading] = useState(true)
   const [sourcesLoading, setSourcesLoading] = useState(true)
+  const [nowPlaying, setNowPlaying] = useState(null)
+  const playerRef = useRef(null)
 
   useEffect(() => {
     async function fetchMovie() {
@@ -32,6 +48,13 @@ function MovieDetail() {
     }
     fetchMovie()
   }, [id])
+
+  function handlePlay(stream, label) {
+    setNowPlaying({ url: stream.url, label })
+    setTimeout(() => {
+      playerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 50)
+  }
 
   if (loading) {
     return <div className="loading-screen">Loading the marquee...</div>
@@ -70,6 +93,18 @@ function MovieDetail() {
         </div>
       </div>
 
+      {nowPlaying && (
+        <div className="movie-player-block" ref={playerRef}>
+          <h2 className="movie-player-title">Now Playing: {nowPlaying.label}</h2>
+          <video
+            className="movie-player-video"
+            src={nowPlaying.url}
+            controls
+            autoPlay
+          />
+        </div>
+      )}
+
       <div className="movie-detail-sources">
         <h2 className="movie-detail-sources-title">Sources</h2>
         {sourcesLoading ? (
@@ -86,11 +121,34 @@ function MovieDetail() {
                 <p className="source-empty">No streams found from this addon.</p>
               ) : (
                 <ul className="source-stream-list">
-                  {source.streams.map((stream, i) => (
-                    <li key={i} className="source-stream-item">
-                      {stream.title || stream.name || 'Unnamed stream'}
-                    </li>
-                  ))}
+                  {source.streams.map((stream, i) => {
+                    const link = getStreamLink(stream)
+                    const label = stream.title || stream.name || 'Unnamed stream'
+                    const playable = isPlayableUrl(stream)
+                    return (
+                      <li key={i} className="source-stream-item">
+                        {playable ? (
+                          <button
+                            className="source-stream-play"
+                            onClick={() => handlePlay(stream, label)}
+                          >
+                            ▶ {label}
+                          </button>
+                        ) : link ? (
+                          <a
+                            href={link}
+                            className="source-stream-link"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {label}
+                          </a>
+                        ) : (
+                          <span className="source-stream-unlinked">{label}</span>
+                        )}
+                      </li>
+                    )
+                  })}
                 </ul>
               )}
             </div>
