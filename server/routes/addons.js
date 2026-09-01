@@ -47,20 +47,17 @@ async function fetchManifest(manifestUrl) {
       },
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
       throw new Error(
-        `Manifest request failed (${response.status})`
+        data.error ||
+          data.message ||
+          `Manifest request failed (${response.status})`
       );
     }
 
-    const contentType =
-      response.headers.get('content-type') || '';
-
-    if (!contentType.includes('application/json')) {
-      throw new Error('Addon manifest is not JSON');
-    }
-
-    return await response.json();
+    return data;
   } finally {
     clearTimeout(timeout);
   }
@@ -134,8 +131,6 @@ router.post('/', async (req, res) => {
       ? manifest.resources
       : [];
 
-    // Your database requires category.
-    // Stremio manifests commonly use `type`.
     const category =
       manifest.type ||
       manifest.categories?.[0] ||
@@ -163,8 +158,8 @@ router.post('/', async (req, res) => {
       RETURNING *`,
       [
         manifest.name.trim(),
-        category,
         normalizedUrl,
+        category,
         resources,
       ]
     );
