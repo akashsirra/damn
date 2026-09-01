@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const {pool} = require('../db');
+const { pool } = require('../db');
 
 const FETCH_TIMEOUT_MS = 10000;
 
 async function fetchJson(url) {
   const controller = new AbortController();
+
   const timeout = setTimeout(
     () => controller.abort(),
     FETCH_TIMEOUT_MS
@@ -19,14 +20,41 @@ async function fetchJson(url) {
       },
     });
 
-    if (!response.ok) {
-      throw new Error(`Addon returned HTTP ${response.status}`);
+    const text = await response.text();
+
+    let data = {};
+
+    try {
+      data = text ? JSON.parse(text) : {};
+    } catch {
+      throw new Error(
+        `Addon returned invalid JSON (HTTP ${response.status})`
+      );
     }
 
-    return await response.json();
+    if (!response.ok) {
+      throw new Error(
+        data.error ||
+        data.message ||
+        `Addon returned HTTP ${response.status}`
+      );
+    }
+
+    return data;
   } finally {
     clearTimeout(timeout);
   }
+}
+
+function getAddonBaseUrl(manifestUrl) {
+  const url = new URL(manifestUrl);
+
+  url.pathname = url.pathname.replace(
+    /\/manifest\.json$/,
+    ''
+  );
+
+  return url.toString().replace(/\/$/, '');
 }
 
 // GET /api/streams/:imdbId
@@ -50,16 +78,22 @@ router.get('/:imdbId', async (req, res) => {
       addons.map(async (addon) => {
         try {
           if (!addon.manifest_url) {
-            throw new Error('Addon has no manifest URL');
+            throw new Error(
+              'Addon has no manifest URL'
+            );
           }
 
-          const base = addon.manifest_url.replace(
-            /\/manifest\.json$/,
-            ''
+          const base = getAddonBaseUrl(
+            addon.manifest_url
           );
 
           const streamUrl =
             `${base}/stream/movie/${encodeURIComponent(imdbId)}.json`;
+
+          console.log(
+            `Fetching streams from ${addon.name}:`,
+            streamUrl
+          );
 
           const data = await fetchJson(streamUrl);
 
@@ -83,7 +117,8 @@ router.get('/:imdbId', async (req, res) => {
             error:
               err.name === 'AbortError'
                 ? 'Addon request timed out'
-                : 'Failed to fetch from this addon',
+                : err.message ||
+                  'Failed to fetch from this addon',
           };
         }
       })
@@ -91,7 +126,10 @@ router.get('/:imdbId', async (req, res) => {
 
     res.json(results);
   } catch (err) {
-    console.error('Failed to fetch stream sources:', err);
+    console.error(
+      'Failed to fetch stream sources:',
+      err
+    );
 
     res.status(500).json({
       error: 'Failed to fetch stream sources',
