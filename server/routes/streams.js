@@ -35,8 +35,8 @@ async function fetchJson(url) {
     if (!response.ok) {
       throw new Error(
         data.error ||
-        data.message ||
-        `Addon returned HTTP ${response.status}`
+          data.message ||
+          `Addon returned HTTP ${response.status}`
       );
     }
 
@@ -47,14 +47,25 @@ async function fetchJson(url) {
 }
 
 function getAddonBaseUrl(manifestUrl) {
-  const url = new URL(manifestUrl);
+  const cleanUrl = manifestUrl.trim();
 
-  url.pathname = url.pathname.replace(
-    /\/manifest\.json$/,
+  return cleanUrl.replace(
+    /\/manifest\.json(?:\?.*)?$/i,
     ''
   );
+}
 
-  return url.toString().replace(/\/$/, '');
+function buildStreamUrl(manifestUrl, imdbId) {
+  const baseUrl = getAddonBaseUrl(manifestUrl);
+
+  if (!/^https?:\/\//i.test(baseUrl)) {
+    throw new Error('Addon manifest URL must use HTTP or HTTPS');
+  }
+
+  return (
+    `${baseUrl}/stream/movie/` +
+    `${encodeURIComponent(imdbId)}.json`
+  );
 }
 
 // GET /api/streams/:imdbId
@@ -69,7 +80,9 @@ router.get('/:imdbId', async (req, res) => {
 
   try {
     const addonsResult = await pool.query(
-      "SELECT * FROM addons WHERE 'stream' = ANY(resources)"
+      `SELECT *
+       FROM addons
+       WHERE 'stream' = ANY(resources)`
     );
 
     const addons = addonsResult.rows;
@@ -83,12 +96,10 @@ router.get('/:imdbId', async (req, res) => {
             );
           }
 
-          const base = getAddonBaseUrl(
-            addon.manifest_url
+          const streamUrl = buildStreamUrl(
+            addon.manifest_url,
+            imdbId
           );
-
-          const streamUrl =
-            `${base}/stream/movie/${encodeURIComponent(imdbId)}.json`;
 
           console.log(
             `Fetching streams from ${addon.name}:`,
