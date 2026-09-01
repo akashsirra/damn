@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {pool} = require('../db');
+const { pool } = require('../db');
 
 const FETCH_TIMEOUT_MS = 8000;
 
@@ -14,7 +14,6 @@ function isSafeAddonUrl(value) {
 
     const hostname = url.hostname.toLowerCase();
 
-    // Block obvious local/private destinations.
     if (
       hostname === 'localhost' ||
       hostname === '127.0.0.1' ||
@@ -34,6 +33,7 @@ function isSafeAddonUrl(value) {
 
 async function fetchManifest(manifestUrl) {
   const controller = new AbortController();
+
   const timeout = setTimeout(
     () => controller.abort(),
     FETCH_TIMEOUT_MS
@@ -48,10 +48,13 @@ async function fetchManifest(manifestUrl) {
     });
 
     if (!response.ok) {
-      throw new Error(`Manifest request failed (${response.status})`);
+      throw new Error(
+        `Manifest request failed (${response.status})`
+      );
     }
 
-    const contentType = response.headers.get('content-type') || '';
+    const contentType =
+      response.headers.get('content-type') || '';
 
     if (!contentType.includes('application/json')) {
       throw new Error('Addon manifest is not JSON');
@@ -73,6 +76,7 @@ router.get('/', async (req, res) => {
     res.json(result.rows);
   } catch (err) {
     console.error('Failed to fetch addons:', err);
+
     res.status(500).json({
       error: 'Failed to fetch addons',
     });
@@ -83,7 +87,10 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const { manifest_url } = req.body;
 
-  if (!manifest_url || typeof manifest_url !== 'string') {
+  if (
+    !manifest_url ||
+    typeof manifest_url !== 'string'
+  ) {
     return res.status(400).json({
       error: 'manifest_url is required',
     });
@@ -98,7 +105,8 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    const manifest = await fetchManifest(normalizedUrl);
+    const manifest =
+      await fetchManifest(normalizedUrl);
 
     if (
       !manifest ||
@@ -110,15 +118,28 @@ router.post('/', async (req, res) => {
       });
     }
 
-    if (!manifest.name || typeof manifest.name !== 'string') {
+    if (
+      !manifest.name ||
+      typeof manifest.name !== 'string'
+    ) {
       return res.status(400).json({
-        error: 'Addon manifest is missing a valid name',
+        error:
+          'Addon manifest is missing a valid name',
       });
     }
 
-    const resources = Array.isArray(manifest.resources)
+    const resources = Array.isArray(
+      manifest.resources
+    )
       ? manifest.resources
       : [];
+
+    // Your database requires category.
+    // Stremio manifests commonly use `type`.
+    const category =
+      manifest.type ||
+      manifest.categories?.[0] ||
+      'General';
 
     const existing = await pool.query(
       'SELECT id FROM addons WHERE manifest_url = $1',
@@ -132,24 +153,40 @@ router.post('/', async (req, res) => {
     }
 
     const result = await pool.query(
-      `INSERT INTO addons (name, manifest_url, resources)
-       VALUES ($1, $2, $3)
-       RETURNING *`,
-      [manifest.name.trim(), normalizedUrl, resources]
+      `INSERT INTO addons (
+        name,
+        manifest_url,
+        category,
+        resources
+      )
+      VALUES ($1, $2, $3, $4)
+      RETURNING *`,
+      [
+        manifest.name.trim(),
+        category,
+        normalizedUrl,
+        resources,
+      ]
     );
 
     res.status(201).json(result.rows[0]);
   } catch (err) {
-    console.error('Failed to install addon:', err);
+    console.error(
+      'Failed to install addon:',
+      err
+    );
 
     if (err.name === 'AbortError') {
       return res.status(504).json({
-        error: 'Addon manifest request timed out',
+        error:
+          'Addon manifest request timed out',
       });
     }
 
     res.status(400).json({
-      error: err.message || 'Failed to install addon',
+      error:
+        err.message ||
+        'Failed to install addon',
     });
   }
 });
@@ -181,7 +218,11 @@ router.delete('/:id', async (req, res) => {
       addon: result.rows[0],
     });
   } catch (err) {
-    console.error('Failed to delete addon:', err);
+    console.error(
+      'Failed to delete addon:',
+      err
+    );
+
     res.status(500).json({
       error: 'Failed to delete addon',
     });
