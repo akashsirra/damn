@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
+const { checkDatabaseConnection } = require('./db');
+
 const app = express();
 
 const PORT = process.env.PORT || 5000;
@@ -51,6 +53,13 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({
     error: err.message || 'Internal server error',
   });
+});
+
+checkDatabaseConnection().catch((err) => {
+  console.error(
+    'PostgreSQL connection failed:',
+    err.message
+  );
 });
 
 const server = app.listen(PORT, () => {
